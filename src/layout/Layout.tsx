@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
 import { Outlet, Link } from "react-router-dom";
 import styled from 'styled-components';
+import Header from "../components/Header/Header";
 
 
 interface LayoutProps {
@@ -11,7 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <LayoutWrapper>
-      Layout
+      <Header/>
        <Outlet />
     </LayoutWrapper>
   )
@@ -19,4 +20,6 @@ const Layout = ({ children }: LayoutProps) => {
 
 export default Layout
 
-const LayoutWrapper = styled.div``;
+const LayoutWrapper = styled.div`
+  padding: 16px;
+`;
