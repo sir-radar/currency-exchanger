@@ -1,12 +1,11 @@
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import Navlink from "../NavLink/NavLink";
-import Icon from '../../assets/icon.svg'
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import Navlink from '../NavLink/NavLink';
+import Icon from '../../assets/icon.svg';
 
-const Header = () => {
-
+function Header() {
   return (
-     <NavWrapper>
+    <NavWrapper>
       <Link to="/">
         <img src={Icon} alt="Site logo" />
       </Link>
@@ -16,10 +15,10 @@ const Header = () => {
         <Navlink text=" EUR-GBP Details" url="/" />
       </NavLinks>
     </NavWrapper>
-  )
+  );
 }
 
-export default Header
+export default Header;
 
 const NavWrapper = styled.nav`
   display: flex;

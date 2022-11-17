@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-interface NavLinkProps {
+interface RouteButtonProps {
   text: string;
   url: string;
 }
 
-function Navlink({ text, url }: NavLinkProps) {
+function RouteButton({ text, url }: RouteButtonProps) {
   return (
     <LinkBtn>
       <Link to={url}>{text}</Link>
@@ -14,11 +14,14 @@ function Navlink({ text, url }: NavLinkProps) {
   );
 }
 
-export default Navlink;
+export default RouteButton;
 
 const LinkBtn = styled.button`
-  background: transparent;
-  border: 1px solid;
+  background: blue;
+  text-align: center;
+  padding: 12px 72px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
   border-radius: 2px;
-  padding: 8px;
 `;

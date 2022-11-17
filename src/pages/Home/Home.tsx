@@ -1,16 +1,14 @@
-import styled from "styled-components";
-import Exchanger from "../../components/Exchanger/Exchanger";
+import styled from 'styled-components';
+import Exchanger from '../../components/Exchanger/Exchanger';
 
-const Home = () => {
-
+function Home() {
   return (
     <HomeWrapper>
-      <Exchanger title="Currency Exchanger"/>
-
+      <Exchanger title="Currency Exchanger" showDetailsBtn />
     </HomeWrapper>
-  )
+  );
 }
 
-export default Home
+export default Home;
 
 const HomeWrapper = styled.div``;

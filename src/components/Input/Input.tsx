@@ -1,21 +1,20 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 interface InputProps {
   label: string;
   onChange: () => void;
 }
 
-const Input = ({label, onChange}: InputProps) => {
-
+function Input({ label, onChange }: InputProps) {
   return (
     <InputWrapper>
       <InputLabel>{label}:</InputLabel>
-      <InputBox onChange={onChange}/>
+      <InputBox onChange={onChange} />
     </InputWrapper>
-  )
+  );
 }
 
-export default Input
+export default Input;
 
 const InputWrapper = styled.div`
   display: flex;
