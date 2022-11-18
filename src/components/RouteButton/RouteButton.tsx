@@ -24,4 +24,10 @@ const LinkBtn = styled.button`
   color: #fff;
   cursor: pointer;
   border-radius: 2px;
+  margin-top: 8px;
+  width: 100%;
+  @media only screen and (min-width: 768px) {
+    margin-top: 0;
+    width: auto;
+  }
 `;

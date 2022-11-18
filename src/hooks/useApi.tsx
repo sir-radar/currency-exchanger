@@ -6,7 +6,7 @@ import { ExchangeRates } from '../model/exchange';
 
 const BASE_URL = 'https://api.apilayer.com/fixer';
 const myHeaders = new Headers();
-myHeaders.append('apikey', 'FCAnNcjUbBrRrGmQzsFqMW78CdvDTK9Y');
+myHeaders.append('apikey', 'EPI14q3doBObXhJ51edXtukt0JU2pdRJ');
 
 const requestOptions = {
   method: 'GET',

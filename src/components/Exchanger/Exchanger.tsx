@@ -171,9 +171,11 @@ export default Exchanger;
 
 const ExchangerWrapper = styled.div`
   margin-top: 24px;
-  position: sticky;
-  top: 80px;
   background: #fff;
+  @media only screen and (min-width: 768px) {
+    position: sticky;
+    top: 80px;
+  }
 `;
 
 const TitleBox = styled.div`
@@ -193,15 +195,19 @@ const Content = styled.div`
 const Box = styled.div``;
 
 const FlexedContent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 24px;
+  @media only screen and (min-width: 768px) {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
 `;
 
 const ConverterSection = styled.div`
-  display: grid;
-  gap: 24px;
-  grid-template-columns: 1fr 2fr;
+  @media only screen and (min-width: 768px) {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr 2fr;
+  }
 `;
 
 const SelectSection = styled.div`
@@ -229,9 +235,12 @@ const SwitchBtn = styled.button`
 `;
 
 const ResultPanel = styled.div`
-  display: grid;
-  gap: 24px;
-  grid-template-columns: 1fr 2fr;
-  align-items: center;
   margin-top: 24px;
+  @media only screen and (min-width: 768px) {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+    margin-top: 24px;
+  }
 `;

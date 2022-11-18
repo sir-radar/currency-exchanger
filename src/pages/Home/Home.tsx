@@ -33,11 +33,13 @@ export default Home;
 const HomeWrapper = styled.div``;
 
 const CardsWrapper = styled.div`
-  display: grid;
-  gap: 24px;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
-  margin-top: 24px;
+  @media only screen and (min-width: 768px) {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    margin-top: 24px;
+  }
 `;
 
 const Card = styled.div`
@@ -45,4 +47,8 @@ const Card = styled.div`
   border-radius: 5px;
   padding: 24px;
   text-align: center;
+  margin-bottom: 10px;
+  @media only screen and (min-width: 768px) {
+    margin-bottom: 0px;
+  }
 `;
