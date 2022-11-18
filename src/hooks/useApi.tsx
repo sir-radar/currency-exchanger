@@ -1,6 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, Dispatch, SetStateAction } from 'react';
 import { ExchangeRates } from '../model/exchange';
 

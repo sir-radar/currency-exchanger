@@ -25,6 +25,9 @@
     "@typescript-eslint/no-use-before-define": "off",
     "react/require-default-props": "off",
     "react-hooks/exhaustive-deps": "off",
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-restricted-syntax": "off",
+    "guard-for-in": "off"
   }
 }

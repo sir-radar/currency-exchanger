@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 
-interface InputProps {
+export interface InputProps {
   label: string;
   value: number;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -9,9 +9,9 @@ interface InputProps {
 
 function Input({ label, value = 1, onChange }: InputProps) {
   return (
-    <InputWrapper>
-      <InputLabel>{label}:</InputLabel>
-      <InputBox type="number" value={value} onChange={onChange} />
+    <InputWrapper data-testid="input-wrapper">
+      <InputLabel data-testid="input-label">{label}:</InputLabel>
+      <InputBox data-testid="input" type="number" value={value} onChange={onChange} />
     </InputWrapper>
   );
 }
