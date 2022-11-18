@@ -17,6 +17,7 @@ interface ExchangerProps {
   to?: string;
   initialAmount?: number;
   disableFromSelect?: boolean;
+  nofifyOnConvertion?: (data: string) => void;
 }
 
 function Exchanger({
@@ -27,7 +28,8 @@ function Exchanger({
   from,
   to,
   initialAmount,
-  disableFromSelect
+  disableFromSelect,
+  nofifyOnConvertion
 }: ExchangerProps) {
   const [currencyOptions, setCurrencyOptions] = useState<string[]>([]);
   const [fromCurrency, setFromCurrency] = useState(from || 'EUR');
@@ -43,6 +45,8 @@ function Exchanger({
   if (amountInFromCurrency) {
     toAmount = amount * exchangeRates[toCurrency as keyof ExchangeRates]!;
   }
+
+  const disableDropDown = amount === null || amount === undefined;
 
   const makeAPICalls = async () => {
     await Promise.all([
@@ -63,6 +67,9 @@ function Exchanger({
       [...popularCurrencies, toCurrency],
       fromCurrency
     );
+    if (nofifyOnConvertion) {
+      nofifyOnConvertion(toCurrency);
+    }
   };
 
   const switchCurrency = () => {
@@ -88,9 +95,9 @@ function Exchanger({
     }
   }, [exchangeRates]);
 
-  // useEffect(() => {
-  //   makeAPICalls();
-  // }, []);
+  useEffect(() => {
+    makeAPICalls();
+  }, []);
 
   return (
     <ExchangerWrapper>
@@ -112,18 +119,22 @@ function Exchanger({
                 value={fromCurrency}
                 options={currencyOptions}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setFromCurrency(e.target.value)}
-                disabled={disableFromSelect}
+                disabled={disableFromSelect || disableDropDown}
               />
+
               <SwitchBtn onClick={switchCurrency}>
                 <img src={Arrow} alt="Currency swap button" />
               </SwitchBtn>
+
               <Select
                 label="To"
                 value={toCurrency}
                 options={currencyOptions}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setToCurrency(e.target.value)}
+                disabled={disableDropDown}
               />
             </SelectSection>
+
             <ConvertBtn onClick={handleCurrencyConvertion}>
               {loading ? 'Converting... ' : 'Convert'}
             </ConvertBtn>
@@ -132,15 +143,15 @@ function Exchanger({
 
         <ResultPanel>
           <Label
-            text={`${amount} ${fromCurrency} = ${
-              !loading ? `${exchangeRate! * amount} ${toCurrency}` : `XX.XX ${toCurrency}`
+            text={`${amount || 0} ${fromCurrency} = ${
+              exchangeRate ? `${exchangeRate! * amount} ${toCurrency}` : `XX.XX ${toCurrency}`
             }`}
             size="medium"
           />
           <FlexedContent>
             <Label
               fullWidth={!showDetailsBtn}
-              text={`${loading ? 'XX.XX' : toAmount} ${toCurrency}`}
+              text={`${exchangeRate ? toAmount : 'XX.XX'} ${toCurrency}`}
               size="large"
             />
             {showDetailsBtn ? (

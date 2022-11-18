@@ -11,8 +11,8 @@ function Header() {
       </Link>
 
       <NavLinks>
-        <Navlink text=" EUR-USD Details" url="/details/EUR/USD" />
-        <Navlink text=" EUR-GBP Details" url="/details/EUR/GBP" />
+        <Navlink text=" EUR-USD Details" url="/details/EUR/USD/1" />
+        <Navlink text=" EUR-GBP Details" url="/details/EUR/GBP/1" />
       </NavLinks>
     </NavWrapper>
   );

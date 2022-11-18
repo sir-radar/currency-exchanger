@@ -1,9 +1,12 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, Dispatch, SetStateAction } from 'react';
 import { ExchangeRates } from '../model/exchange';
 
 const BASE_URL = 'https://api.apilayer.com/fixer';
 const myHeaders = new Headers();
-myHeaders.append('apikey', 'rYY2QrZfmv19WOkZRem9u4fLy8LH9jpq');
+myHeaders.append('apikey', 'FCAnNcjUbBrRrGmQzsFqMW78CdvDTK9Y');
 
 const requestOptions = {
   method: 'GET',
@@ -17,18 +20,19 @@ type Props = {
 
 const useApi = () => {
   const [loading, setLoading] = useState(false);
+  const [rates, setRates] = useState<any>([]);
 
-  function getSymbols({ setCurrencyOptions }: Props) {
-    fetch(`${BASE_URL}/symbols`, requestOptions)
+  const getSymbols = async ({ setCurrencyOptions }: Props) => {
+    await fetch(`${BASE_URL}/symbols`, requestOptions)
       .then((res) => res.json())
       .then((data) => {
         if (data.symbols) {
           setCurrencyOptions([...Object.keys(data.symbols)]);
         }
       });
-  }
+  };
 
-  const convertCurrency = (
+  const convertCurrency = async (
     setExchangeRates: Dispatch<SetStateAction<ExchangeRates>>,
     setAmountInFromCurrency: (value: boolean) => void,
     popularCurrencies: string[],
@@ -36,7 +40,10 @@ const useApi = () => {
   ) => {
     setLoading(true);
     try {
-      fetch(`${BASE_URL}/latest?base=${fromCurrency}&symbols=${popularCurrencies}`, requestOptions)
+      await fetch(
+        `${BASE_URL}/latest?base=${fromCurrency}&symbols=${popularCurrencies}`,
+        requestOptions
+      )
         .then((res) => res.json())
         .then((data) => {
           setExchangeRates(data.rates);
@@ -48,7 +55,24 @@ const useApi = () => {
     }
   };
 
-  return { getSymbols, convertCurrency, loading };
+  const getRatesTimeLine = async (currency: string, symbols: string[]) => {
+    setRates([]);
+    await fetch(
+      `${BASE_URL}/timeseries?start_date=2022-08-18&end_date=2022-10-18&base=${currency}&symbols=${symbols}`,
+      requestOptions
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const totalArry = [['Month', ...symbols]];
+        setRates(data.rates);
+        for (const rate in data.rates) {
+          totalArry.push([rate, ...Object.values(data.rates[rate])] as any);
+        }
+        setRates(totalArry);
+      });
+  };
+
+  return { getSymbols, convertCurrency, getRatesTimeLine, rates, loading };
 };
 
 export default useApi;
