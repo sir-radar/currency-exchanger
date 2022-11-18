@@ -1,48 +1,28 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import Exchanger from '../../components/Exchanger/Exchanger';
+import { ExchangeRates } from '../../model/exchange';
 
 function Home() {
+  const [data, setData] = useState<ExchangeRates>({});
+  const [convertedAmount, setConvertedAmount] = useState(0);
   return (
     <HomeWrapper>
-      <Exchanger title="Currency Exchanger" showDetailsBtn />
+      <Exchanger
+        sendData={(items: ExchangeRates, amount: number) => {
+          setData(items);
+          setConvertedAmount(amount);
+        }}
+        title="Currency Exchanger"
+        showDetailsBtn
+      />
 
       <CardsWrapper>
-        <Card> This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card> This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card> This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card> This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card> This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card> This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
-        <Card>This is a card</Card>
+        {Object.keys(data)?.map((key) => (
+          <Card key={key}>
+            {data[key as keyof ExchangeRates]! * convertedAmount} {key}
+          </Card>
+        ))}
       </CardsWrapper>
     </HomeWrapper>
   );

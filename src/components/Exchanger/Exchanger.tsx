@@ -11,17 +11,18 @@ import { ExchangeRates } from '../../model/exchange';
 interface ExchangerProps {
   title: string;
   showDetailsBtn?: boolean;
+  sendData?: (data: ExchangeRates, amount: number) => void;
 }
 
-function Exchanger({ title, showDetailsBtn }: ExchangerProps) {
+function Exchanger({ title, showDetailsBtn, sendData }: ExchangerProps) {
   const [currencyOptions, setCurrencyOptions] = useState<string[]>([]);
   const [fromCurrency, setFromCurrency] = useState('EUR');
   const [toCurrency, setToCurrency] = useState<keyof ExchangeRates | string>('USD');
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({});
   const [amount, setAmount] = useState(1);
   const [amountInFromCurrency, setAmountInFromCurrency] = useState(false);
-  const { getSymbols, convertCurrency, loading } = useApi(fromCurrency);
-  const popularCurrencies = ['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CHF', 'CNH', 'HKD'];
+  const { getSymbols, convertCurrency, loading } = useApi();
+  const popularCurrencies = ['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CHF', 'NZD', 'HKD'];
 
   let toAmount = 0;
   const exchangeRate = exchangeRates[toCurrency as keyof ExchangeRates] ?? null;
@@ -32,13 +33,41 @@ function Exchanger({ title, showDetailsBtn }: ExchangerProps) {
   const makeAPICalls = async () => {
     await Promise.all([
       getSymbols({ setCurrencyOptions }),
-      convertCurrency(setExchangeRates, setAmountInFromCurrency, [...popularCurrencies, toCurrency])
+      convertCurrency(
+        setExchangeRates,
+        setAmountInFromCurrency,
+        [...popularCurrencies, toCurrency],
+        fromCurrency
+      )
     ]);
   };
 
   const handleCurrencyConvertion = () => {
-    convertCurrency(setExchangeRates, setAmountInFromCurrency, [...popularCurrencies, toCurrency]);
+    convertCurrency(
+      setExchangeRates,
+      setAmountInFromCurrency,
+      [...popularCurrencies, toCurrency],
+      fromCurrency
+    );
   };
+
+  const switchCurrency = () => {
+    const to = fromCurrency;
+    const from = toCurrency;
+    setToCurrency(to);
+    setFromCurrency(from);
+    convertCurrency(setExchangeRates, setAmountInFromCurrency, [...popularCurrencies, to], from);
+  };
+
+  useEffect(() => {
+    if (sendData) {
+      const temRates = { ...exchangeRates };
+      if (Object.keys(temRates).length > popularCurrencies.length) {
+        delete temRates[toCurrency as keyof ExchangeRates];
+      }
+      sendData(temRates, amount);
+    }
+  }, [exchangeRates]);
 
   useEffect(() => {
     makeAPICalls();
@@ -62,7 +91,7 @@ function Exchanger({ title, showDetailsBtn }: ExchangerProps) {
                 options={currencyOptions}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setFromCurrency(e.target.value)}
               />
-              <SwitchBtn>
+              <SwitchBtn onClick={switchCurrency}>
                 <img src={Arrow} alt="Currency swap button" />
               </SwitchBtn>
               <Select
@@ -81,14 +110,14 @@ function Exchanger({ title, showDetailsBtn }: ExchangerProps) {
         <ResultPanel>
           <Label
             text={`${amount} ${fromCurrency} = ${
-              exchangeRate ? `${exchangeRate! * amount} ${toCurrency}` : `XX.XX ${toCurrency}`
+              !loading ? `${exchangeRate! * amount} ${toCurrency}` : `XX.XX ${toCurrency}`
             }`}
             size="medium"
           />
           <FlexedContent>
             <Label
               fullWidth={!showDetailsBtn}
-              text={`${toAmount || 'XX.XX'} ${toCurrency}`}
+              text={`${loading ? 'XX.XX' : toAmount} ${toCurrency}`}
               size="large"
             />
             {showDetailsBtn ? <RouteButton text="More Details" url="/" /> : null}

@@ -3,7 +3,7 @@ import { ExchangeRates } from '../model/exchange';
 
 const BASE_URL = 'https://api.apilayer.com/fixer';
 const myHeaders = new Headers();
-myHeaders.append('apikey', 'qA0biegPupU5MUghqM9Fd9Rf0eQs99sl');
+myHeaders.append('apikey', 'rYY2QrZfmv19WOkZRem9u4fLy8LH9jpq');
 
 const requestOptions = {
   method: 'GET',
@@ -15,7 +15,7 @@ type Props = {
   setCurrencyOptions: Dispatch<SetStateAction<string[]>>;
 };
 
-const useApi = (fromCurrency: string) => {
+const useApi = () => {
   const [loading, setLoading] = useState(false);
 
   function getSymbols({ setCurrencyOptions }: Props) {
@@ -31,7 +31,8 @@ const useApi = (fromCurrency: string) => {
   const convertCurrency = (
     setExchangeRates: Dispatch<SetStateAction<ExchangeRates>>,
     setAmountInFromCurrency: (value: boolean) => void,
-    popularCurrencies: string[]
+    popularCurrencies: string[],
+    fromCurrency: string
   ) => {
     setLoading(true);
     try {
