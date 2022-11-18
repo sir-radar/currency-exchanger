@@ -4,7 +4,6 @@ import Label, { LabelProps } from './Label';
 
 describe('Label', () => {
   const setup = (props: LabelProps) => {
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return render(<Label {...props} />);
   };
 

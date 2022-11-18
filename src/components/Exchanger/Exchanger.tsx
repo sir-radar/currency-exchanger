@@ -8,7 +8,7 @@ import RouteButton from '../RouteButton/RouteButton';
 import useApi from '../../hooks/useApi';
 import { ExchangeRates } from '../../model/exchange';
 
-interface ExchangerProps {
+export interface ExchangerProps {
   title: string;
   showDetailsBtn?: boolean;
   showBackBtn?: boolean;
@@ -86,16 +86,16 @@ function Exchanger({
   }, [exchangeRates]);
 
   useEffect(() => {
-    // makeAPICalls();
+    makeAPICalls();
   }, []);
 
   return (
-    <ExchangerWrapper>
-      <TitleBox>
+    <ExchangerWrapper data-testid="exchange-wrapper">
+      <TitleBox data-testid="title-box">
         <Title>{title}</Title>
         {showBackBtn ? <RouteButton text="Back to Home" url="/" /> : null}
       </TitleBox>
-      <Content>
+      <Content data-testid="exchange-content">
         <ConverterSection>
           <Input
             value={amount}

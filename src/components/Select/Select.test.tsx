@@ -4,7 +4,6 @@ import Select, { SelectProps } from './Select';
 
 describe('Input', () => {
   const setup = (props: SelectProps) => {
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return render(<Select {...props} />);
   };
 

@@ -4,7 +4,6 @@ import Input, { InputProps } from './Input';
 
 describe('Input', () => {
   const setup = (props: InputProps) => {
-    // eslint-disable-next-line react/jsx-props-no-spreading
     return render(<Input {...props} />);
   };
 
