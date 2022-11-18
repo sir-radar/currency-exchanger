@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import Label, { LabelProps } from './Label';
 
-describe('Input', () => {
+describe('Label', () => {
   const setup = (props: LabelProps) => {
     // eslint-disable-next-line react/jsx-props-no-spreading
     return render(<Label {...props} />);

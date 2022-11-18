@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 
-interface SelectProps {
+export interface SelectProps {
   value: string;
   label: string;
   options: string[];
@@ -11,9 +11,9 @@ interface SelectProps {
 
 function Select({ value, label, options, onChange, disabled }: SelectProps) {
   return (
-    <SelectWrapper>
-      <SelectLabel>{label}:</SelectLabel>
-      <SelectBox value={value} onChange={onChange} disabled={disabled}>
+    <SelectWrapper data-testid="select-wrapper">
+      <SelectLabel data-testid="select-label">{label}:</SelectLabel>
+      <SelectBox data-testid="select-box" value={value} onChange={onChange} disabled={disabled}>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}
