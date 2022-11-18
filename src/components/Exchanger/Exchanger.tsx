@@ -11,15 +11,29 @@ import { ExchangeRates } from '../../model/exchange';
 interface ExchangerProps {
   title: string;
   showDetailsBtn?: boolean;
+  showBackBtn?: boolean;
   sendData?: (data: ExchangeRates, amount: number) => void;
+  from?: string;
+  to?: string;
+  initialAmount?: number;
+  disableFromSelect?: boolean;
 }
 
-function Exchanger({ title, showDetailsBtn, sendData }: ExchangerProps) {
+function Exchanger({
+  title,
+  showDetailsBtn,
+  showBackBtn,
+  sendData,
+  from,
+  to,
+  initialAmount,
+  disableFromSelect
+}: ExchangerProps) {
   const [currencyOptions, setCurrencyOptions] = useState<string[]>([]);
-  const [fromCurrency, setFromCurrency] = useState('EUR');
-  const [toCurrency, setToCurrency] = useState<keyof ExchangeRates | string>('USD');
+  const [fromCurrency, setFromCurrency] = useState(from || 'EUR');
+  const [toCurrency, setToCurrency] = useState<keyof ExchangeRates | string>(to || 'USD');
   const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({});
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(initialAmount || 1);
   const [amountInFromCurrency, setAmountInFromCurrency] = useState(false);
   const { getSymbols, convertCurrency, loading } = useApi();
   const popularCurrencies = ['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CHF', 'NZD', 'HKD'];
@@ -52,11 +66,16 @@ function Exchanger({ title, showDetailsBtn, sendData }: ExchangerProps) {
   };
 
   const switchCurrency = () => {
-    const to = fromCurrency;
-    const from = toCurrency;
-    setToCurrency(to);
-    setFromCurrency(from);
-    convertCurrency(setExchangeRates, setAmountInFromCurrency, [...popularCurrencies, to], from);
+    const tempTo = fromCurrency;
+    const tempFrom = toCurrency;
+    setToCurrency(tempTo);
+    setFromCurrency(tempFrom);
+    convertCurrency(
+      setExchangeRates,
+      setAmountInFromCurrency,
+      [...popularCurrencies, tempTo],
+      tempFrom
+    );
   };
 
   useEffect(() => {
@@ -69,13 +88,16 @@ function Exchanger({ title, showDetailsBtn, sendData }: ExchangerProps) {
     }
   }, [exchangeRates]);
 
-  useEffect(() => {
-    makeAPICalls();
-  }, []);
+  // useEffect(() => {
+  //   makeAPICalls();
+  // }, []);
 
   return (
     <ExchangerWrapper>
-      <Title>{title}</Title>
+      <TitleBox>
+        <Title>{title}</Title>
+        {showBackBtn ? <RouteButton text="Back to Home" url="/" /> : null}
+      </TitleBox>
       <Content>
         <ConverterSection>
           <Input
@@ -90,6 +112,7 @@ function Exchanger({ title, showDetailsBtn, sendData }: ExchangerProps) {
                 value={fromCurrency}
                 options={currencyOptions}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setFromCurrency(e.target.value)}
+                disabled={disableFromSelect}
               />
               <SwitchBtn onClick={switchCurrency}>
                 <img src={Arrow} alt="Currency swap button" />
@@ -120,7 +143,12 @@ function Exchanger({ title, showDetailsBtn, sendData }: ExchangerProps) {
               text={`${loading ? 'XX.XX' : toAmount} ${toCurrency}`}
               size="large"
             />
-            {showDetailsBtn ? <RouteButton text="More Details" url="/" /> : null}
+            {showDetailsBtn ? (
+              <RouteButton
+                text="More Details"
+                url={`details/${fromCurrency}/${toCurrency}/${amount}`}
+              />
+            ) : null}
           </FlexedContent>
         </ResultPanel>
       </Content>
@@ -137,9 +165,14 @@ const ExchangerWrapper = styled.div`
   background: #fff;
 `;
 
-const Title = styled.h2`
+const TitleBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
 `;
+
+const Title = styled.h2``;
 
 const Content = styled.div`
   padding: 24px 10px;

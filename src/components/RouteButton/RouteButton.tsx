@@ -8,9 +8,9 @@ interface RouteButtonProps {
 
 function RouteButton({ text, url }: RouteButtonProps) {
   return (
-    <LinkBtn>
-      <Link to={url}>{text}</Link>
-    </LinkBtn>
+    <Link to={url}>
+      <LinkBtn>{text}</LinkBtn>
+    </Link>
   );
 }
 
