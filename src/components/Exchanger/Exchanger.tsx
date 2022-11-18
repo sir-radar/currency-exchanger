@@ -33,9 +33,8 @@ function Exchanger({
 }: ExchangerProps) {
   const [fromCurrency, setFromCurrency] = useState(from || 'EUR');
   const [toCurrency, setToCurrency] = useState<keyof ExchangeRates | string>(to || 'USD');
-  // const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({});
   const [amount, setAmount] = useState(initialAmount || 1);
-  // const [amountInFromCurrency, setAmountInFromCurrency] = useState(false);
+
   const {
     getSymbols,
     convertCurrency,
