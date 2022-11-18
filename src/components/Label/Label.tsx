@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-interface LabelProps {
+export interface LabelProps {
   text: string;
   size: 'medium' | 'large';
   fullWidth?: boolean;
@@ -8,8 +8,8 @@ interface LabelProps {
 
 function Label({ text, size = 'medium', fullWidth }: LabelProps) {
   return (
-    <LabelWrapper fullWidth={fullWidth} size={size}>
-      <p>{text}</p>
+    <LabelWrapper data-testid="label-wrapper" fullWidth={fullWidth} size={size}>
+      <p data-testid="label-text">{text}</p>
     </LabelWrapper>
   );
 }
