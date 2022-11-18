@@ -31,13 +31,19 @@ function Exchanger({
   disableFromSelect,
   nofifyOnConvertion
 }: ExchangerProps) {
-  const [currencyOptions, setCurrencyOptions] = useState<string[]>([]);
   const [fromCurrency, setFromCurrency] = useState(from || 'EUR');
   const [toCurrency, setToCurrency] = useState<keyof ExchangeRates | string>(to || 'USD');
-  const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({});
+  // const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({});
   const [amount, setAmount] = useState(initialAmount || 1);
-  const [amountInFromCurrency, setAmountInFromCurrency] = useState(false);
-  const { getSymbols, convertCurrency, loading } = useApi();
+  // const [amountInFromCurrency, setAmountInFromCurrency] = useState(false);
+  const {
+    getSymbols,
+    convertCurrency,
+    amountInFromCurrency,
+    currencyOptions,
+    exchangeRates,
+    loading
+  } = useApi();
   const popularCurrencies = ['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CHF', 'NZD', 'HKD'];
 
   let toAmount = 0;
@@ -50,23 +56,13 @@ function Exchanger({
 
   const makeAPICalls = async () => {
     await Promise.all([
-      getSymbols({ setCurrencyOptions }),
-      convertCurrency(
-        setExchangeRates,
-        setAmountInFromCurrency,
-        [...popularCurrencies, toCurrency],
-        fromCurrency
-      )
+      getSymbols(),
+      convertCurrency([...popularCurrencies, toCurrency], fromCurrency)
     ]);
   };
 
   const handleCurrencyConvertion = () => {
-    convertCurrency(
-      setExchangeRates,
-      setAmountInFromCurrency,
-      [...popularCurrencies, toCurrency],
-      fromCurrency
-    );
+    convertCurrency([...popularCurrencies, toCurrency], fromCurrency);
     if (nofifyOnConvertion) {
       nofifyOnConvertion(toCurrency);
     }
@@ -77,12 +73,7 @@ function Exchanger({
     const tempFrom = toCurrency;
     setToCurrency(tempTo);
     setFromCurrency(tempFrom);
-    convertCurrency(
-      setExchangeRates,
-      setAmountInFromCurrency,
-      [...popularCurrencies, tempTo],
-      tempFrom
-    );
+    convertCurrency([...popularCurrencies, tempTo], tempFrom);
   };
 
   useEffect(() => {
