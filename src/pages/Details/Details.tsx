@@ -25,7 +25,7 @@ function Details() {
   };
 
   useEffect(() => {
-    requestRates();
+    // requestRates();
   }, [newCurrency]);
 
   return (

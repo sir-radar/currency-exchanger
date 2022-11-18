@@ -5,14 +5,14 @@ import Icon from '../../assets/icon.svg';
 
 function Header() {
   return (
-    <NavWrapper>
+    <NavWrapper data-testid="header-wrapper">
       <Link to="/">
-        <img src={Icon} alt="Site logo" />
+        <img data-testid="header-logo" src={Icon} alt="Site logo" />
       </Link>
 
       <NavLinks>
-        <Navlink text=" EUR-USD Details" url="/details/EUR/USD/1" />
-        <Navlink text=" EUR-GBP Details" url="/details/EUR/GBP/1" />
+        <Navlink text="EUR-USD Details" url="/details/EUR/USD/1" />
+        <Navlink text="EUR-GBP Details" url="/details/EUR/GBP/1" />
       </NavLinks>
     </NavWrapper>
   );

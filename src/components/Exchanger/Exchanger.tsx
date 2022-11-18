@@ -96,7 +96,7 @@ function Exchanger({
   }, [exchangeRates]);
 
   useEffect(() => {
-    makeAPICalls();
+    // makeAPICalls();
   }, []);
 
   return (
