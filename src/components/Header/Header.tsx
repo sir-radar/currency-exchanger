@@ -11,8 +11,8 @@ function Header() {
       </Link>
 
       <NavLinks>
-        <Navlink text=" EUR-USD Details" url="/" />
-        <Navlink text=" EUR-GBP Details" url="/" />
+        <Navlink text=" EUR-USD Details" url="/details/EUR/USD" />
+        <Navlink text=" EUR-GBP Details" url="/details/EUR/GBP" />
       </NavLinks>
     </NavWrapper>
   );
@@ -24,6 +24,10 @@ const NavWrapper = styled.nav`
   display: flex;
   justify-content: space-between;
   padding: 8px;
+  position: sticky;
+  top: 16px;
+  background-color: #dcdcdc;
+  box-shadow: rgb(0 0 0 / 10%) 0px 0px 20px 6px;
 `;
 
 const NavLinks = styled.nav`

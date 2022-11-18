@@ -1,9 +1,12 @@
 import styled from 'styled-components';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Input from '../Input/Input';
 import Label from '../Label/Label';
 import Select from '../Select/Select';
 import Arrow from '../../assets/arrow.svg';
 import RouteButton from '../RouteButton/RouteButton';
+import useApi from '../../hooks/useApi';
+import { ExchangeRates } from '../../model/exchange';
 
 interface ExchangerProps {
   title: string;
@@ -11,28 +14,83 @@ interface ExchangerProps {
 }
 
 function Exchanger({ title, showDetailsBtn }: ExchangerProps) {
+  const [currencyOptions, setCurrencyOptions] = useState<string[]>([]);
+  const [fromCurrency, setFromCurrency] = useState('EUR');
+  const [toCurrency, setToCurrency] = useState<keyof ExchangeRates | string>('USD');
+  const [exchangeRates, setExchangeRates] = useState<ExchangeRates>({});
+  const [amount, setAmount] = useState(1);
+  const [amountInFromCurrency, setAmountInFromCurrency] = useState(false);
+  const { getSymbols, convertCurrency, loading } = useApi(fromCurrency);
+  const popularCurrencies = ['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CHF', 'CNH', 'HKD'];
+
+  let toAmount = 0;
+  const exchangeRate = exchangeRates[toCurrency as keyof ExchangeRates] ?? null;
+  if (amountInFromCurrency) {
+    toAmount = amount * exchangeRates[toCurrency as keyof ExchangeRates]!;
+  }
+
+  const makeAPICalls = async () => {
+    await Promise.all([
+      getSymbols({ setCurrencyOptions }),
+      convertCurrency(setExchangeRates, setAmountInFromCurrency, [...popularCurrencies, toCurrency])
+    ]);
+  };
+
+  const handleCurrencyConvertion = () => {
+    convertCurrency(setExchangeRates, setAmountInFromCurrency, [...popularCurrencies, toCurrency]);
+  };
+
+  useEffect(() => {
+    makeAPICalls();
+  }, []);
+
   return (
     <ExchangerWrapper>
-      <h2>{title}</h2>
+      <Title>{title}</Title>
       <Content>
         <ConverterSection>
-          <Input label="Amount" onChange={() => null} />
-          <Content>
+          <Input
+            value={amount}
+            label="Amount"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setAmount(parseInt(e.target.value, 10))}
+          />
+          <Box>
             <SelectSection>
-              <Select label="From" value="" options={['USD', 'EUR']} onChange={() => null} />
+              <Select
+                label="From"
+                value={fromCurrency}
+                options={currencyOptions}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => setFromCurrency(e.target.value)}
+              />
               <SwitchBtn>
                 <img src={Arrow} alt="Currency swap button" />
               </SwitchBtn>
-              <Select label="To" value="" options={['USD', 'EUR']} onChange={() => null} />
+              <Select
+                label="To"
+                value={toCurrency}
+                options={currencyOptions}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => setToCurrency(e.target.value)}
+              />
             </SelectSection>
-            <ConvertBtn>Convert</ConvertBtn>
-          </Content>
+            <ConvertBtn onClick={handleCurrencyConvertion}>
+              {loading ? 'Converting... ' : 'Convert'}
+            </ConvertBtn>
+          </Box>
         </ConverterSection>
 
         <ResultPanel>
-          <Label text="1.00 EUR = XXX USD" size="medium" />
+          <Label
+            text={`${amount} ${fromCurrency} = ${
+              exchangeRate ? `${exchangeRate! * amount} ${toCurrency}` : `XX.XX ${toCurrency}`
+            }`}
+            size="medium"
+          />
           <FlexedContent>
-            <Label fullWidth={!showDetailsBtn} text="XXX USD" size="large" />
+            <Label
+              fullWidth={!showDetailsBtn}
+              text={`${toAmount || 'XX.XX'} ${toCurrency}`}
+              size="large"
+            />
             {showDetailsBtn ? <RouteButton text="More Details" url="/" /> : null}
           </FlexedContent>
         </ResultPanel>
@@ -43,9 +101,23 @@ function Exchanger({ title, showDetailsBtn }: ExchangerProps) {
 
 export default Exchanger;
 
-const ExchangerWrapper = styled.div``;
+const ExchangerWrapper = styled.div`
+  margin-top: 24px;
+  position: sticky;
+  top: 80px;
+  background: #fff;
+`;
 
-const Content = styled.div``;
+const Title = styled.h2`
+  margin-bottom: 16px;
+`;
+
+const Content = styled.div`
+  padding: 24px 10px;
+  background-color: #dcdcdc;
+`;
+
+const Box = styled.div``;
 
 const FlexedContent = styled.div`
   display: flex;

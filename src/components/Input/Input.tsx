@@ -1,15 +1,17 @@
+import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 
 interface InputProps {
   label: string;
-  onChange: () => void;
+  value: number;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-function Input({ label, onChange }: InputProps) {
+function Input({ label, value = 1, onChange }: InputProps) {
   return (
     <InputWrapper>
       <InputLabel>{label}:</InputLabel>
-      <InputBox onChange={onChange} />
+      <InputBox type="number" value={value} onChange={onChange} />
     </InputWrapper>
   );
 }

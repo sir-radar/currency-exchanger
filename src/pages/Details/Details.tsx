@@ -1,5 +1,11 @@
+import Exchanger from '../../components/Exchanger/Exchanger';
+
 function Details() {
-  return <div>Home</div>;
+  return (
+    <div>
+      <Exchanger title="Currency Exchanger" />
+    </div>
+  );
 }
 
 export default Details;

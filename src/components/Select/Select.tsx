@@ -1,10 +1,11 @@
+import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 
 interface SelectProps {
   value: string;
   label: string;
   options: string[];
-  onChange: () => void;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   disabled?: boolean;
 }
 
