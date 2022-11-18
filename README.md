@@ -6,4 +6,4 @@ Requirements:
 
 To start locally:
 
-- run `npm dev`
+- run `npm run dev`
